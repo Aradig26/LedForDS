@@ -7,11 +7,13 @@
 int const NUM_PIXELS = 12;
 int8_t const PIN = 13;
 Adafruit_NeoPixel strip;
-int ledIndexes[] = {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0};
-
+int ledIndexes[NUM_PIXELS];
 
 
 void setup() {
+    for (int i = 0; i < NUM_PIXELS; i++) {
+        ledIndexes[i] = i % 2 == 0 ? 1 : 0;
+    }
   strip = Adafruit_NeoPixel(NUM_PIXELS, PIN, NEO_GRB + NEO_KHZ800);
   strip.begin();
   strip.setBrightness(5); //set Brightness to 5
