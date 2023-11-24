@@ -67,8 +67,8 @@ void workInProgress() {
   }
 }
 
-void colorScheme(cases cases) {
-    switch(cases) {
+void colorScheme(cases mode) {
+    switch(mode) {
         case GAME_TIME:
             gameTime();
             break;
@@ -84,7 +84,7 @@ void colorScheme(cases cases) {
     }
 }
 
-cases getCase(int i) {
+cases getCase(int i) { //TODO: add logic
     if (i == 0) {
         return GAME_TIME;
     }
@@ -101,7 +101,7 @@ cases getCase(int i) {
 }
 
 void loop() {
-    colorScheme(getCase(0)); // Pass the LED indexes array to the function
+    colorScheme(getCase(0)); // Pass the LED indexes array to the function TODO: change getCase(); with logic code
     strip.show(); // Update NeoPixel strip
     delay(250);
 
