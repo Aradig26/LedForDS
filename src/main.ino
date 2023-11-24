@@ -97,6 +97,7 @@ cases getCase(int i) {
     if (i == 3) {
         return WORK_IN_PROGRESS;
     }
+    return ERROR;
 }
 
 void loop() {
