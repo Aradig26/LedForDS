@@ -65,7 +65,7 @@ void setup() {
     }
     strip = Adafruit_NeoPixel(NUM_PIXELS, PIN, NEO_GRB + NEO_KHZ800);
     strip.begin();
-    strip.setBrightness(5); //set Brightness to 5
+    strip.setBrightness(255); //set Brightness of the LEDs
     strip.show(); // init all pixels "off"
 }
 
@@ -267,7 +267,6 @@ void colorScheme(cases mode) {
             break;
     }
 }
-
 cases getCase() {
     if (Serial.available() > 0) {
         String receivedData = Serial.readString();  // Read incoming data
@@ -377,7 +376,6 @@ cases getCase() {
 
     return ERROR;
 }
-
 void loop() {
     colorScheme(getCase()); // Pass the LED indexes array to the function
     strip.show(); // Update NeoPixel strip
