@@ -52,7 +52,6 @@ enum cases {
     IDLE,
     ERROR
 };
-
 void colorScheme(cases mode);
 
 void setup() {
@@ -103,13 +102,25 @@ void setOneThird(COLORS_467 color, int third) {
     }
 }
 
+unsigned long previousMillis = 0;
+bool colorToggle = false; // Variable to toggle between colors
+
 void setBlinkColors(COLORS_467 color1, COLORS_467 color2) {
-    for (int y = 0; y < NUM_PIXELS; y++) {
-        while (true) {
-            strip.setPixelColor(y, color2);
-            delay(3000);
-            strip.setPixelColor(y, color1);
+    unsigned long currentMillis = millis();
+
+    if (currentMillis - previousMillis >= 1000) {
+        previousMillis = currentMillis;
+
+        if (colorToggle) {
+            for (int y = 0; y < NUM_PIXELS; y++) {
+                strip.setPixelColor(y, color1);
+            }
+        } else {
+            for (int y = 0; y < NUM_PIXELS; y++) {
+                strip.setPixelColor(y, color2);
+            }
         }
+        colorToggle = !colorToggle;
     }
 }
 
@@ -126,7 +137,6 @@ void setColorMovingUp(COLORS_467 fgColor, COLORS_467 bgColor) {
         i = 0;
     }
 }
-
 void setColorMovingDown(COLORS_467 fgColor, COLORS_467 bgColor) {
     static int i = NUM_PIXELS;
     for (int y = 0; y < NUM_PIXELS; y++) {
@@ -158,7 +168,6 @@ void scoreVictoryLeds() {
         }
     }
 }
-
 void rainbowLed() {
     static uint16_t startIndex = 0;
     static uint16_t offset = 0;
