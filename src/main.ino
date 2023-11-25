@@ -19,55 +19,57 @@ enum cases {
 void colorScheme(cases mode);
 
 void setup() {
+    Serial.begin(9600);
+    Serial.println("Start");
     for (int i = 0; i < NUM_PIXELS; i++) {
         ledIndexes[i] = i % 2 == 0 ? 1 : 0;
     }
-  strip = Adafruit_NeoPixel(NUM_PIXELS, PIN, NEO_GRB + NEO_KHZ800);
-  strip.begin();
-  strip.setBrightness(5); //set Brightness to 5
-  strip.show(); // init all pixels "off"
+    strip = Adafruit_NeoPixel(NUM_PIXELS, PIN, NEO_GRB + NEO_KHZ800);
+    strip.begin();
+    strip.setBrightness(5); //set Brightness to 5
+    strip.show(); // init all pixels "off"
 }
 
 void gameTime() {
-  for (int y = 0; y < NUM_PIXELS; y++) {
-    if (ledIndexes[y] == 1) {
-      strip.setPixelColor(y, 0x1F51FF); // Blue color for index with value 1
-      ledIndexes[y] = 0;
-    } else {
-      strip.setPixelColor(y, 0xFFFF33); // Yellow color for index with value 0
-      ledIndexes[y] = 1;
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        if (ledIndexes[y] == 1) {
+            strip.setPixelColor(y, 0x1F51FF); // Blue color for index with value 1
+            ledIndexes[y] = 0;
+        } else {
+            strip.setPixelColor(y, 0xFFFF33); // Yellow color for index with value 0
+            ledIndexes[y] = 1;
+        }
     }
-  }
 }
 
 void error() {
-  for (int y = 0; y < NUM_PIXELS; y++) {
-    if (ledIndexes[y] == 1) {
-      strip.setPixelColor(y, 0xFF0000); // Red color for index with value 1
-    } else {
-      strip.setPixelColor(y, 0x000000); // Black color for index with value 0
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        if (ledIndexes[y] == 1) {
+            strip.setPixelColor(y, 0xFF0000); // Red color for index with value 1
+        } else {
+            strip.setPixelColor(y, 0x000000); // Black color for index with value 0
+        }
     }
-  }
- }
+}
 
- void idle() {
-  for (int y = 0; y < NUM_PIXELS; y++) {
-    if (ledIndexes[y] == 1) {
-      strip.setPixelColor(y, 0x000000); // Black color for index with value 1
-    } else {
-      strip.setPixelColor(y, 0x111111); // White color for index with value 0
+void idle() {
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        if (ledIndexes[y] == 1) {
+            strip.setPixelColor(y, 0x000000); // Black color for index with value 1
+        } else {
+            strip.setPixelColor(y, 0x111111); // White color for index with value 0
+        }
     }
-  }
 }
 
 void workInProgress() {
-  for (int y = 0; y < NUM_PIXELS; y++) {
-    if (ledIndexes[y] == 1) {
-      strip.setPixelColor(y, 0xFF0000); // Red color for index with value 1
-    } else {
-      strip.setPixelColor(y, 0x111111); // White color for index with value 0
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        if (ledIndexes[y] == 1) {
+            strip.setPixelColor(y, 0xFF0000); // Red color for index with value 1
+        } else {
+            strip.setPixelColor(y, 0x111111); // White color for index with value 0
+        }
     }
-  }
 }
 
 void colorScheme(cases mode) {
@@ -89,24 +91,28 @@ void colorScheme(cases mode) {
     }
 }
 
-cases getCase(int i) { //TODO: add logic
-    if (i == 0) {
-        return GAME_TIME;
-    }
-    if (i == 1) {
-        return ERROR;
-    }
-    if (i == 2) {
+cases getCase() { //TODO: add logic
+    if (Serial.available() > 0) {
+        String receivedData = Serial.readString();  // Read incoming data
+        if (receivedData.equals("GAME_TIME")) {
+            return GAME_TIME;
+        }
+        if (receivedData.equals("ERROR")) {
+            return ERROR;
+        }
+        if (receivedData.equals("IDLE")) {
+            return IDLE;
+        }
+        if (receivedData.equals("WORK_IN_PROGRESS")) {
+            return WORK_IN_PROGRESS;
+        }
         return IDLE;
-    }
-    if (i == 3) {
-        return WORK_IN_PROGRESS;
     }
     return ERROR;
 }
 
 void loop() {
-    colorScheme(getCase(0)); // Pass the LED indexes array to the function TODO: change getCase(); with logic code
+    colorScheme(getCase()); // Pass the LED indexes array to the function
     strip.show(); // Update NeoPixel strip
     delay(250);
 }
