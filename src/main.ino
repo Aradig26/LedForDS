@@ -4,12 +4,17 @@
 #include <avr/power.h>
 #endif
 
-int const NUM_PIXELS = 12;
-int8_t const PIN = 13;
+int const NUM_PIXELS = 100; // Number of pixels in the NeoPixel strip TODO: Change
+int8_t const PIN = 13; // Pin number for the NeoPixel strip TODO: Change
 Adafruit_NeoPixel strip;
-int ledIndexes[NUM_PIXELS];
+int ledIndexes[NUM_PIXELS]; // Array to store the indexes of the LEDs
 
-enum COLORS_467 {
+//For blinking colors method
+unsigned long previousMillis = 0;
+bool colorToggle = false; // Variable to toggle between colors
+
+
+enum COLORS_467 { //basic COLORS we use for the LEDs
     Black = 0x000000,
     White = 0xFFFFFF,
     Red = 0xFF0000,
@@ -22,8 +27,6 @@ enum COLORS_467 {
 
 const COLORS_467 ARM_UNCALIBRATED_COLOR = Red;
 const COLORS_467 BATTERY_LOW_COLOR = Orange;
-const int RAINBOW_DELAY = 20;
-const int RAINBOW_AMOUNT = 256/16;
 
 enum cases {
     WANT_CUBE,
@@ -91,8 +94,8 @@ void setBottom(COLORS_467 color) {
     }
 }
 void setOneThird(COLORS_467 color, int third) {
-    int setMinPixels = third == 1 ? 0 : third == 2 ? NUM_PIXELS/3 : (NUM_PIXELS/3)*2;
-    int setMaxPixels = third == 1 ? NUM_PIXELS/3 : third == 2 ? (NUM_PIXELS/3)*2 : NUM_PIXELS;
+    int setMinPixels = round(third == 1 ? 0 : third == 2 ? NUM_PIXELS/3 : (NUM_PIXELS/3)*2);
+    int setMaxPixels = round(third == 1 ? NUM_PIXELS/3 : third == 2 ? (NUM_PIXELS/3)*2 : NUM_PIXELS);
     for (int y = 0; y < NUM_PIXELS; y++) {
         if (y>=setMinPixels && y<setMaxPixels) {
             strip.setPixelColor(y, color);
@@ -101,10 +104,6 @@ void setOneThird(COLORS_467 color, int third) {
         }
     }
 }
-
-unsigned long previousMillis = 0;
-bool colorToggle = false; // Variable to toggle between colors
-
 void setBlinkColors(COLORS_467 color1, COLORS_467 color2) {
     unsigned long currentMillis = millis();
 
@@ -123,7 +122,6 @@ void setBlinkColors(COLORS_467 color1, COLORS_467 color2) {
         colorToggle = !colorToggle;
     }
 }
-
 void setColorMovingUp(COLORS_467 fgColor, COLORS_467 bgColor) {
     static int i = 0;
     for (int y = 0; y < NUM_PIXELS; y++) {
