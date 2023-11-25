@@ -9,6 +9,14 @@ int8_t const PIN = 13;
 Adafruit_NeoPixel strip;
 int ledIndexes[NUM_PIXELS];
 
+enum cases {
+    GAME_TIME,
+    ERROR,
+    IDLE,
+    WORK_IN_PROGRESS
+};
+
+void colorScheme(cases mode);
 
 void setup() {
     for (int i = 0; i < NUM_PIXELS; i++) {
@@ -19,13 +27,6 @@ void setup() {
   strip.setBrightness(5); //set Brightness to 5
   strip.show(); // init all pixels "off"
 }
-
-enum cases { //TODO: rename
-    GAME_TIME,
-    ERROR,
-    IDLE,
-    WORK_IN_PROGRESS
-};
 
 void gameTime() {
   for (int y = 0; y < NUM_PIXELS; y++) {
@@ -83,6 +84,8 @@ void colorScheme(cases mode) {
         case WORK_IN_PROGRESS:
             workInProgress();
             break;
+        default:
+            idle();
     }
 }
 
@@ -106,5 +109,4 @@ void loop() {
     colorScheme(getCase(0)); // Pass the LED indexes array to the function TODO: change getCase(); with logic code
     strip.show(); // Update NeoPixel strip
     delay(250);
-
 }
