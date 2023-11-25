@@ -22,6 +22,8 @@ enum COLORS_467 {
 
 const COLORS_467 ARM_UNCALIBRATED_COLOR = Red;
 const COLORS_467 BATTERY_LOW_COLOR = Orange;
+const int RAINBOW_DELAY = 20;
+const int RAINBOW_AMOUNT = 256/16;
 
 enum cases {
     WANT_CUBE,
@@ -146,6 +148,20 @@ void scoreVictoryLeds() {
 }
 
 void rainbowLed() { //TODO: Make this work
+    static uint16_t startIndex = 0;
+    static uint16_t offset = 0;
+
+    startIndex = (startIndex + 1) % 360; // Increase this value to change the speed of the rainbow effect
+    offset = (offset + 1) % strip.numPixels(); // Offset to shift LED positions
+
+    for (int i = 0; i < strip.numPixels(); i++) {
+        int pixelHue = startIndex + (i * 0.04);
+        pixelHue = pixelHue % 360; // Keep hue value within 0-359
+
+        int pixelPos = (i + offset) % strip.numPixels(); // Calculate new pixel position
+
+        strip.setPixelColor(pixelPos, strip.gamma32(strip.ColorHSV(pixelHue * 65536L / 360)));
+    }
 }
 
 void colorScheme(cases mode) {
