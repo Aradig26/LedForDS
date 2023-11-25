@@ -147,20 +147,20 @@ void scoreVictoryLeds() {
     }
 }
 
-void rainbowLed() { //TODO: Make this work
+void rainbowLed() {
     static uint16_t startIndex = 0;
     static uint16_t offset = 0;
 
-    startIndex = (startIndex + 1) % 360; // Increase this value to change the speed of the rainbow effect
-    offset = (offset + 1) % strip.numPixels(); // Offset to shift LED positions
+    startIndex = (startIndex + 2) % 360;
+    offset = (offset + 2) % strip.numPixels(); // Offset to shift LED positions
 
     for (uint16_t i = 0; i < strip.numPixels(); i++) {
-        int pixelHue = startIndex + (i * 3.5);
+        int pixelHue = startIndex + (i *2.2);
         pixelHue = pixelHue % 360; // Keep hue value within 0-359
 
         int pixelPos = (i + offset) % strip.numPixels(); // Calculate new pixel position
 
-        strip.setPixelColor(pixelPos, strip.gamma32(strip.ColorHSV(pixelHue * 65536L / 360)));
+        strip.setPixelColor(pixelPos, strip.gamma32(strip.ColorHSV(pixelHue * 65536L / 360))); // Set pixel color
     }
 }
 
