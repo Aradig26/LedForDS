@@ -113,19 +113,31 @@ void setBlinkColors(COLORS_467 color1, COLORS_467 color2) {
     }
 }
 
-void setColorMovingUp(COLORS_467 color1, COLORS_467 color2) {
+void setColorMovingUp(COLORS_467 fgColor, COLORS_467 bgColor) {
+    static int i = 0;
     for (int y = 0; y < NUM_PIXELS; y++) {
-        strip.setPixelColor(y, color1);
+        strip.setPixelColor(y, bgColor);
+    }
+    if (i <= NUM_PIXELS) {
         delay(100);
-        strip.setPixelColor(y+1, color2);
+        strip.setPixelColor(i, fgColor);
+        i++;
+    } else {
+        i = 0;
     }
 }
 
-void setColorMovingDown(COLORS_467 color1, COLORS_467 color2) {
-    for (int y = NUM_PIXELS; y > 0; y--) {
-        strip.setPixelColor(y, color1);
+void setColorMovingDown(COLORS_467 fgColor, COLORS_467 bgColor) {
+    static int i = NUM_PIXELS;
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        strip.setPixelColor(y, bgColor);
+    }
+    if (i <= NUM_PIXELS&&i>=0) {
         delay(100);
-        strip.setPixelColor(y-1, color2);
+        strip.setPixelColor(i, fgColor);
+        i--;
+    } else {
+        i = NUM_PIXELS;
     }
 }
 void balanceVictoryLeds() {
