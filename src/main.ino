@@ -155,7 +155,7 @@ void rainbowLed() { //TODO: Make this work
     offset = (offset + 1) % strip.numPixels(); // Offset to shift LED positions
 
     for (uint16_t i = 0; i < strip.numPixels(); i++) {
-        int pixelHue = startIndex + (i * 0.04);
+        int pixelHue = startIndex + (i * 3.5);
         pixelHue = pixelHue % 360; // Keep hue value within 0-359
 
         int pixelPos = (i + offset) % strip.numPixels(); // Calculate new pixel position
