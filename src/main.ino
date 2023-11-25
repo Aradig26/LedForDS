@@ -9,6 +9,20 @@ int8_t const PIN = 13;
 Adafruit_NeoPixel strip;
 int ledIndexes[NUM_PIXELS];
 
+enum COLORS_467 {
+    Black = 0x000000,
+    White = 0xFFFFFF,
+    Red = 0xFF0000,
+    Green = 0x00FF00,
+    Blue = 0x0000FF,
+    Yellow = 0xFFFF00,
+    Purple = 0x800080,
+    Orange = 0xFFA500
+};
+
+const COLORS_467 ARM_UNCALIBRATED_COLOR = Red;
+const COLORS_467 BATTERY_LOW_COLOR = Orange;
+
 enum cases {
     WANT_CUBE,
     WANT_CONE,
@@ -60,8 +74,79 @@ void error() {
         }
     }
 }
+void set(COLORS_467 color) {
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        strip.setPixelColor(y, color);
+    }
+}
+void setTop(COLORS_467 color) {
+    for (int y = 0; y < NUM_PIXELS / 2; y++) {
+        strip.setPixelColor(y, color);
+    }
+}
+void setBottom(COLORS_467 color) {
+    for (int y = NUM_PIXELS / 2; y < NUM_PIXELS; y++) {
+        strip.setPixelColor(y, color);
+    }
+}
+void setOneThird(COLORS_467 color, int third) {
+    int setMinPixels = third == 1 ? 0 : third == 2 ? NUM_PIXELS/3 : (NUM_PIXELS/3)*2;
+    int setMaxPixels = third == 1 ? NUM_PIXELS/3 : third == 2 ? (NUM_PIXELS/3)*2 : NUM_PIXELS;
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        if (y>=setMinPixels && y<setMaxPixels) {
+            strip.setPixelColor(y, color);
+        } else {
+            strip.setPixelColor(y, Black);
+        }
+    }
+}
 
+void setBlinkColors(COLORS_467 color1, COLORS_467 color2) {
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        while (true) {
+            strip.setPixelColor(y, color2);
+            delay(3000);
+            strip.setPixelColor(y, color1);
+        }
+    }
+}
 
+void setColorMovingUp(COLORS_467 color1, COLORS_467 color2) {
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        strip.setPixelColor(y, color1);
+        delay(100);
+        strip.setPixelColor(y+1, color2);
+    }
+}
+
+void setColorMovingDown(COLORS_467 color1, COLORS_467 color2) {
+    for (int y = NUM_PIXELS; y > 0; y--) {
+        strip.setPixelColor(y, color1);
+        delay(100);
+        strip.setPixelColor(y-1, color2);
+    }
+}
+void balanceVictoryLeds() {
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        if (y % 2 == 0) {
+            strip.setPixelColor(y, Blue); // Blue color for index with value 1
+        } else {
+            strip.setPixelColor(y, Yellow); // Yellow color for index with value 0
+        }
+    }
+}
+void scoreVictoryLeds() {
+    for (int y = 0; y < NUM_PIXELS; y++) {
+        if (y % 2 == 0) {
+            strip.setPixelColor(y, Blue); // Blue color for index with value 1
+        } else {
+            strip.setPixelColor(y, Yellow); // Yellow color for index with value 0
+        }
+    }
+}
+
+void rainbowLed() { //TODO: Make this work
+}
 
 void colorScheme(cases mode) {
     switch (mode) {
@@ -72,68 +157,63 @@ void colorScheme(cases mode) {
             set(ARM_UNCALIBRATED_COLOR);
             break;
         case CONE_HIGH:
-            setOneThird(COLORS_467.Yellow, 3);
+            setOneThird(Yellow, 3);
             break;
         case CONE_LOW:
-            setOneThird(COLORS_467.Yellow, 1);
+            setOneThird(Yellow, 1);
             break;
         case CONE_MID:
-            setOneThird(COLORS_467.Yellow, 2);
+            setOneThird(Yellow, 2);
             break;
         case CUBE_HIGH:
-            setOneThird(COLORS_467.Purple, 3);
+            setOneThird(Purple, 3);
             break;
         case CUBE_LOW:
-            setOneThird(COLORS_467.Purple, 1);
+            setOneThird(Purple, 1);
             break;
         case CUBE_MID:
-            setOneThird(COLORS_467.Purple, 2);
+            setOneThird(Purple, 2);
             break;
         case HOLD_CONE:
-            setBlinkColors(
-                    COLORS_467.Yellow, COLORS_467.White);
+            setBlinkColors(Yellow, White);
             break;
         case HOLD_CUBE:
-            setBlinkColors(
-                    COLORS_467.Purple, COLORS_467.White);
+            setBlinkColors(Purple, White);
             break;
         case INTAKE_CONE:
-            setColorMovingUp(COLORS_467.White, COLORS_467.Yellow);
+            setColorMovingUp(White, Yellow);
             break;
         case INTAKE_CUBE:
-            setColorMovingUp(COLORS_467.White, COLORS_467.Purple);
+            setColorMovingUp(White, Purple);
             break;
         case RELEASE_CONE:
-            setColorMovingDown(COLORS_467.Black, COLORS_467.Yellow);
+            setColorMovingDown(Black, Yellow);
             break;
         case RELEASE_CUBE:
-            setColorMovingDown(COLORS_467.Black, COLORS_467.Purple);
+            setColorMovingDown(Black, Purple);
             break;
         case WANT_CONE:
-            set(COLORS_467.Yellow);
+            set(Yellow);
             break;
         case WANT_CUBE:
-            set(COLORS_467.Purple);
+            set(Purple);
             break;
         case INTAKE_UNKNOWN:
-            setColorMovingUp(
-                    COLORS_467.Purple, COLORS_467.Yellow);
+            setColorMovingUp(Purple, Yellow);
             break;
         case RELEASE_UNKNOWN:
-            setColorMovingDown(
-                    COLORS_467.Yellow, COLORS_467.Purple);
+            setColorMovingDown(Yellow, Purple);
             break;
         case CALIBRATING:
-            setBlinkColors(
-                    ARM_UNCALIBRATED_COLOR, ARM_UNCALIBRATED_COLOR, COLORS_467.Black);
+            setBlinkColors(ARM_UNCALIBRATED_COLOR, Black);
             break;
         case SHELF:
-            setTop(COLORS_467.Purple);
-            setBottom(COLORS_467.Yellow);
+            setTop(Purple);
+            setBottom(Yellow);
             break;
         case FLOOR:
-            setBottom(COLORS_467.Purple);
-            setTop(COLORS_467.Yellow);
+            setBottom(Purple);
+            setTop(Yellow);
             break;
         case BALANCE_VICTORY:
             balanceVictoryLeds();
