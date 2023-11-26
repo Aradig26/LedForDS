@@ -251,8 +251,8 @@ void colorScheme(cases mode) {
             setBottom(DarkBlue);
             break;
         case FLOOR:
-            setBottom(DarkBlue);
-            setTop(LightBlue);
+            setBottom(DarkBrown);
+            setTop(LightBrown);
             break;
         case BALANCE_VICTORY:
             balanceVictoryLeds();
