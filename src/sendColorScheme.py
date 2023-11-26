@@ -2,7 +2,7 @@ import serial
 from networktables import NetworkTables
 
 # Set up NetworkTables connection
-NetworkTables.initialize(server='10.4.67.2')  # Replace 'localhost'
+NetworkTables.initialize(server='roborio-467-frc.local')  # Replace 'localhost' 10.4.67.2
 table = NetworkTables.getTable('Leds')
 
 # Configure serial communication with Arduino Uno
