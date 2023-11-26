@@ -22,7 +22,11 @@ enum COLORS_467 { //basic COLORS we use for the LEDs
     Blue = 0x0000FF,
     Yellow = 0xFFFF00,
     Purple = 0x800080,
-    Orange = 0xFFA500
+    Orange = 0xFFA500,
+    DarkBlue = 0x191970,
+    LightBlue = 0xADD8E6,
+    DarkBrown = 0x5C4033,
+    LightBrown = 0xAB7E4C
 };
 
 const COLORS_467 ARM_UNCALIBRATED_COLOR = Red;
@@ -243,12 +247,12 @@ void colorScheme(cases mode) {
             setBlinkColors(ARM_UNCALIBRATED_COLOR, Black);
             break;
         case SHELF:
-            setTop(Purple);
-            setBottom(Yellow);
+            setTop(LightBlue);
+            setBottom(DarkBlue);
             break;
         case FLOOR:
-            setBottom(Purple);
-            setTop(Yellow);
+            setBottom(DarkBlue);
+            setTop(LightBlue);
             break;
         case BALANCE_VICTORY:
             balanceVictoryLeds();
