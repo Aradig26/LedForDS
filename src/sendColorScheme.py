@@ -6,7 +6,7 @@ NetworkTables.initialize(server='roborio-467-frc.local')  # Replace 'localhost' 
 table = NetworkTables.getTable('Leds')
 
 # Configure serial communication with Arduino Uno
-arduino_port = '/dev/ttyACM0'  # Replace with Arduino port (windows: COMx)
+arduino_port = 'COM1'  # Replace with Arduino port (windows: COMx)
 baud_rate = 9600  # TODO: Fine tune baud rate
 ser = serial.Serial(arduino_port, baud_rate, timeout=1)
 
@@ -20,7 +20,8 @@ def send_to_arduino(data):
 try:
     while True:
         # Read data from NetworkTables 'Leds/ColorScheme' field
-        color = table.getString('ColorScheme', 'DEFAULT')
+        color = table.getString('ColorScheme', 'ERROR')  # Default to 'ERROR' if no data is found
+        print(color)
 
         # Send the color data to Arduino
         send_to_arduino(color)
