@@ -1,9 +1,8 @@
-import time
 import serial
 from networktables import NetworkTables
 
 # Set up NetworkTables connection
-NetworkTables.initialize(server='localhost')  # Replace 'localhost'
+NetworkTables.initialize(server='10.4.67.2')  # Replace 'localhost'
 table = NetworkTables.getTable('Leds')
 
 # Configure serial communication with Arduino Uno
