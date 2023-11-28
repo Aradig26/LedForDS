@@ -4,7 +4,7 @@
 #include <avr/power.h>
 #endif
 
-int const NUM_PIXELS = 100; // Number of pixels in the NeoPixel strip TODO: Change
+int const NUM_PIXELS = 117; // Number of pixels in the NeoPixel strip TODO: Change
 int8_t const PIN = 13; // Pin number for the NeoPixel strip TODO: Change
 Adafruit_NeoPixel strip;
 int ledIndexes[NUM_PIXELS]; // Array to store the indexes of the LEDs
