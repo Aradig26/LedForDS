@@ -2,7 +2,7 @@ import serial
 from networktables import NetworkTables
 
 # Set up NetworkTables connection
-NetworkTables.initialize(server='roborio-467-frc.local')  # Replace 'localhost' 10.4.67.2
+NetworkTables.initialize(server='roborio-467-frc.local')  # Replace with 'localhost' / 10.4.67.2 if it doesn't work
 table = NetworkTables.getTable('Leds')
 
 # Configure serial communication with Arduino Uno
@@ -21,10 +21,10 @@ try:
     while True:
         # Read data from NetworkTables 'Leds/ColorScheme' field
         color = table.getString('ColorScheme', 'ERROR')  # Default to 'ERROR' if no data is found
-        print(color)
 
         # Send the color data to Arduino
-        send_to_arduino(color)
+        send_to_arduino(color + '\n')
+        print(ser.read().decode('utf-8'))  # Read data from Arduino
 
 except KeyboardInterrupt:
     ser.close()  # Close the serial connection on program termination

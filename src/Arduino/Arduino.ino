@@ -1,11 +1,11 @@
+#include <Adafruit_NeoPixel.h>
 #include <Arduino.h>
-#include "../.pio/libdeps/uno/Adafruit NeoPixel/Adafruit_NeoPixel.h"
 #ifdef __AVR__
 #include <avr/power.h>
 #endif
 
-int const NUM_PIXELS = 117; // Number of pixels in the NeoPixel strip TODO: Change
-int8_t const PIN = 13; // Pin number for the NeoPixel strip TODO: Change
+int const NUM_PIXELS = 120; // Number of pixels in the NeoPixel strip
+int8_t const PIN = 13; // Pin for the NeoPixel strip
 Adafruit_NeoPixel strip;
 int ledIndexes[NUM_PIXELS]; // Array to store the indexes of the LEDs
 
@@ -22,7 +22,7 @@ enum COLORS_467 { //basic COLORS we use for the LEDs
     Blue = 0x0000FF,
     Yellow = 0xFFFF00,
     Purple = 0x800080,
-    Orange = 0xFFA500,
+    Orange = 0xff8800,
     DarkBlue = 0x191970,
     LightBlue = 0xADD8E6,
     DarkBrown = 0x5C4033,
@@ -59,7 +59,8 @@ enum cases {
     IDLE,
     ERROR
 };
-void colorScheme(cases mode);
+void setColorScheme(cases mode);
+cases lastColorScheme;
 
 void setup() {
     Serial.begin(9600);
@@ -174,11 +175,11 @@ void rainbowLed() {
     static uint16_t startIndex = 0;
     static uint16_t offset = 0;
 
-    startIndex = (startIndex + 2) % 360;
-    offset = (offset + 2) % strip.numPixels(); // Offset to shift LED positions
+    startIndex = (startIndex + 4) % 360;
+    offset = (offset + 1) % strip.numPixels(); // Offset to shift LED positions
 
     for (uint16_t i = 0; i < strip.numPixels(); i++) {
-        int pixelHue = startIndex + (i *2.2);
+        int pixelHue = startIndex + (i *2.8);
         pixelHue = pixelHue % 360; // Keep hue value within 0-359
 
         int pixelPos = (i + offset) % strip.numPixels(); // Calculate new pixel position
@@ -187,7 +188,7 @@ void rainbowLed() {
     }
 }
 
-void colorScheme(cases mode) {
+void setColorScheme(cases mode) {
     switch (mode) {
         case BATTERY_LOW:
             set(BATTERY_LOW_COLOR);
@@ -273,7 +274,8 @@ void colorScheme(cases mode) {
 }
 cases getCase() {
     if (Serial.available() > 0) {
-        String receivedData = Serial.readString();  // Read incoming data
+        String receivedData = Serial.readStringUntil('\n'); // Read incoming data
+        Serial.print(receivedData); //log the received data
 
         // Check if the battery is low
         if (receivedData.equals("BATTERY_LOW")) {
@@ -373,15 +375,18 @@ cases getCase() {
         if (receivedData.equals("DEFAULT")) {
             return IDLE;
         }
-
-        // Sets ERROR if nothing received (never used)
-        return ERROR;
     }
 
     return ERROR;
 }
 void loop() {
-    colorScheme(getCase()); // Pass the LED indexes array to the function
+    cases colorScheme = getCase();
+        // Clears leds if colorScheme changed
+    if (colorScheme != lastColorScheme) {
+      strip.clear();
+      lastColorScheme = colorScheme;
+    }
+    setColorScheme(colorScheme); // Pass the LED state to the function
     strip.show(); // Update NeoPixel strip
     delay(250);
 }
