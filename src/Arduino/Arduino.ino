@@ -63,7 +63,7 @@ void setColorScheme(cases mode);
 cases lastColorScheme;
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     Serial.println("Start");
     for (int i = 0; i < NUM_PIXELS; i++) {
         ledIndexes[i] = i % 2 == 0 ? 1 : 0;
