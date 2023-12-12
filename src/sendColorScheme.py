@@ -21,7 +21,7 @@ table = NetworkTables.getTable('Leds')
 
 
 # Function to send data to Arduino
-def send_to_arduino(serial, data):
+def send_to_arduino(ser, data):
     """Send data to Arduino via serial connection.
 
     Args:
@@ -30,7 +30,7 @@ def send_to_arduino(serial, data):
     """
     data_str = str(data)  # Ensure data is in string format
     try:
-        serial.write(data_str.encode())  # Send data to Arduino
+        ser.write(data_str.encode())  # Send data to Arduino
         logging.info('Data sent to Arduino successfully.')
     except Exception as error:
         logging.error(f'Failed to send data to Arduino: {error}.')
