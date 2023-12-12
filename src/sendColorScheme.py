@@ -19,8 +19,9 @@ except Exception as e:
 
 table = NetworkTables.getTable('Leds')
 
+
 # Function to send data to Arduino
-def send_to_arduino(ser, data):
+def send_to_arduino(serial, data):
     """Send data to Arduino via serial connection.
 
     Args:
@@ -29,31 +30,28 @@ def send_to_arduino(ser, data):
     """
     data_str = str(data)  # Ensure data is in string format
     try:
-        ser.write(data_str.encode())  # Send data to Arduino
+        serial.write(data_str.encode())  # Send data to Arduino
         logging.info('Data sent to Arduino successfully.')
-    except Exception as e:
-        logging.error(f'Failed to send data to Arduino: {e}.')
+    except Exception as error:
+        logging.error(f'Failed to send data to Arduino: {error}.')
 
 
 # Configure serial communication with Arduino Uno
 try:
     ser = serial.Serial(ARDUINO_PORT, BAUD_RATE, timeout=1)
     logging.info('Successfully connected to Arduino.')
+    while True:
+        try:
+            # Read data from NetworkTables 'Leds/ColorScheme' field
+            color = table.getString('ColorScheme', 'ERROR')  # Default to 'ERROR' if no data is found
+            send_to_arduino(ser, color)
+            time.sleep(.25)  # Sleep for a bit to not thrash CPU
+
+            # Read data from Arduino and log it
+            logging.info('Data received from Arduino: {}'.format(ser.read().decode('utf-8')))
+        except KeyboardInterrupt:
+            ser.close()  # Close the serial connection on program termination
+            logging.info('Serial connection to Arduino closed.')
+
 except Exception as e:
     logging.error(f'Failed to establish connection with Arduino: {e}.')
-
-try:
-    while True:
-        # Read data from NetworkTables 'Leds/ColorScheme' field
-        color = table.getString('ColorScheme', 'ERROR')  # Default to 'ERROR' if no data is found
-        send_to_arduino(ser, color)
-        time.sleep(1)  # Sleep for a bit to not thrash CPU
-
-        # Read data from Arduino and log it
-        arduino_data = ser.read().decode('utf-8')
-        logging.info('Data received from Arduino: {}'.format(arduino_data))
-
-
-except KeyboardInterrupt:
-    ser.close()  # Close the serial connection on program termination
-    logging.info('Serial connection to Arduino closed.')
