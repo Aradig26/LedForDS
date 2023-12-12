@@ -6,8 +6,8 @@ NetworkTables.initialize(server='roborio-467-frc.local')  # Replace with 'localh
 table = NetworkTables.getTable('Leds')
 
 # Configure serial communication with Arduino Uno
-arduino_port = 'COM3'  # Replace with Arduino port (windows: COMx)
-baud_rate = 9600  # TODO: Fine tune baud rate
+arduino_port = 'COM5'  # Replace with Arduino port (windows: COMx)
+baud_rate = 115200  # TODO: Fine tune baud rate
 ser = serial.Serial(arduino_port, baud_rate, timeout=1)
 
 
