@@ -19,6 +19,34 @@ except Exception as e:
 
 table = NetworkTables.getTable('AdvantageKit/RealOutputs/Leds')
 
+# Mapping between color schemes and corresponding integer values
+COLOR_SCHEME_MAP = {
+    'WANT_CUBE': 100,
+    'WANT_CONE': 101,
+    'HOLD_CUBE': 102,
+    'HOLD_CONE': 103,
+    'INTAKE_CUBE': 104,
+    'INTAKE_CONE': 105,
+    'RELEASE_CUBE': 106,
+    'RELEASE_CONE': 107,
+    'BATTERY_LOW': 108,
+    'ARM_UNCALIBRATED': 109,
+    'CUBE_LOW': 110,
+    'CUBE_MID': 111,
+    'CUBE_HIGH': 112,
+    'CONE_LOW': 113,
+    'CONE_MID': 114,
+    'CONE_HIGH': 115,
+    'INTAKE_UNKNOWN': 116,
+    'RELEASE_UNKNOWN': 117,
+    'CALIBRATING': 118,
+    'FLOOR': 119,
+    'SHELF': 120,
+    'BALANCE_VICTORY': 121,
+    'AUTO_SCORE': 122,
+    'IDLE': 123,
+    'ERROR': 999  # Default value for unmatched cases
+}
 
 # Function to send data to Arduino
 def send_to_arduino(ser, data):
@@ -28,9 +56,9 @@ def send_to_arduino(ser, data):
     ser: The serial connection object.
     data: The data to send.
     """
-    data_str = str(data)  # Ensure data is in string format
+    data_int = COLOR_SCHEME_MAP.get(data, COLOR_SCHEME_MAP['ERROR'])  # Get the corresponding integer or use default
     try:
-        ser.write(data_str.encode())  # Send data to Arduino
+        ser.write(data_int)  # Send data to Arduino
         logging.info('Data sent to Arduino successfully.')
     except Exception as error:
         logging.error(f'Failed to send data to Arduino: {error}.')

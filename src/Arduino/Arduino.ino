@@ -33,7 +33,7 @@ const COLORS_467 ARM_UNCALIBRATED_COLOR = Red;
 const COLORS_467 BATTERY_LOW_COLOR = Orange;
 
 enum cases {
-    WANT_CUBE,
+    WANT_CUBE = 100,
     WANT_CONE,
     HOLD_CUBE,
     HOLD_CONE,
@@ -57,7 +57,7 @@ enum cases {
     BALANCE_VICTORY,
     AUTO_SCORE,
     IDLE,
-    ERROR
+    ERROR = 999
 };
 void setColorScheme(cases mode);
 cases lastColorScheme;
@@ -273,132 +273,17 @@ void setColorScheme(cases mode) {
     }
 }
 
-String getData() {
-        // Read incoming bytes into a buffer
-        char receivedData[64]; // Adjust the buffer size as needed
-        memset(receivedData, 0, sizeof(receivedData)); // Clear the buffer
-        
-        int bytesRead = Serial.readBytesUntil('\n', receivedData, sizeof(receivedData) - 1);
-
-        if (bytesRead > 0) {
-            // Convert bytes to a string
-            String receivedString = String(receivedData);
-    
-            // Clear the buffer for the next read
-            memset(receivedData, 0, sizeof(receivedData));
-            return receivedData;
-        }
-    return "ERROR"
-}
-
-
 cases getCase() {
     if (Serial.available() > 0) {
-        String receivedData = Serial.read()==-1? "ERROR": getData(); // Read incoming data
-        Serial.print(receivedData); //log the received data
+        int receivedInt = Serial.parseInt(); // Read the incoming integer
+        Serial.print(receivedInt); // Log the received data
 
-        // Check if the battery is low
-        if (receivedData.equals("BATTERY_LOW")) {
-            return BATTERY_LOW;
-        }
-        // Check if arm is calibrated
-        if (receivedData.equals("ARM_UNCALIBRATED")) {
-            return ARM_UNCALIBRATED;
-        }
-        if (receivedData.equals("BALANCE_VICTORY")) {
-            return BALANCE_VICTORY;
-        }
-        if (receivedData.equals("AUTO_SCORE")) {
-            return AUTO_SCORE;
-        }
-
-        // When the arm is calibrating
-        if (receivedData.equals("CALIBRATING")) {
-            return CALIBRATING;
-        }
-
-        // When arm is scoring high
-        if (receivedData.equals("CUBE_HIGH")) {
-            return CUBE_HIGH;
-        }
-        if (receivedData.equals("CONE_HIGH")) {
-            return CONE_HIGH;
-        }
-
-        // When arm is scoring mid-node
-        if (receivedData.equals("CUBE_MID")) {
-            return CUBE_MID;
-        }
-        if (receivedData.equals("CONE_MID")) {
-            return CONE_MID;
-        }
-
-        // When arm is scoring hybrid/low node
-        if (receivedData.equals("CUBE_LOW")) {
-            return CUBE_LOW;
-        }
-        if (receivedData.equals("CONE_LOW")) {
-            return CONE_LOW;
-        }
-
-        // When picking up game pieces from shelf
-        if (receivedData.equals("SHELF")) {
-            return SHELF;
-        }
-
-        // When picking up game pieces from the floor
-        if (receivedData.equals("FLOOR")) {
-            return FLOOR;
-        }
-
-        // If trying to hold on to something
-        if (receivedData.equals("HOLD_CUBE")) {
-            return HOLD_CUBE;
-        }
-        if (receivedData.equals("HOLD_CONE")) {
-            return HOLD_CONE;
-        }
-
-        // If trying to intake something
-        if (receivedData.equals("INTAKE_CUBE")) {
-            return INTAKE_CUBE;
-        }
-        if (receivedData.equals("INTAKE_CONE")) {
-            return INTAKE_CONE;
-        }
-        if (receivedData.equals("INTAKE_UNKNOWN")) {
-            return INTAKE_UNKNOWN;
-        }
-
-        // If trying to release something
-        if (receivedData.equals("RELEASE_CUBE")) {
-            return RELEASE_CUBE;
-        }
-        if (receivedData.equals("RELEASE_CONE")) {
-            return RELEASE_CONE;
-        }
-        if (receivedData.equals("RELEASE_UNKNOWN")) {
-            return RELEASE_UNKNOWN;
-        }
-
-        // If we want cubes
-        if (receivedData.equals("WANT_CUBE")) {
-            return WANT_CUBE;
-        }
-
-        // If we want cones
-        if (receivedData.equals("WANT_CONE")) {
-            return WANT_CONE;
-        }
-
-        //If default case
-        if (receivedData.equals("DEFAULT")) {
-            return IDLE;
-        }
+        return static_cast<cases>(receivedInt);
     }
 
     return ERROR;
 }
+
 void loop() {
     cases colorScheme = getCase();
         // Clears leds if colorScheme changed
