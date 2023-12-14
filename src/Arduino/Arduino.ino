@@ -272,9 +272,29 @@ void setColorScheme(cases mode) {
             break;
     }
 }
+
+String getData() {
+        // Read incoming bytes into a buffer
+        char receivedData[64]; // Adjust the buffer size as needed
+        memset(receivedData, 0, sizeof(receivedData)); // Clear the buffer
+        
+        int bytesRead = Serial.readBytesUntil('\n', receivedData, sizeof(receivedData) - 1);
+
+        if (bytesRead > 0) {
+            // Convert bytes to a string
+            String receivedString = String(receivedData);
+    
+            // Clear the buffer for the next read
+            memset(receivedData, 0, sizeof(receivedData));
+            return receivedData;
+        }
+    return "ERROR"
+}
+
+
 cases getCase() {
     if (Serial.available() > 0) {
-        String receivedData = Serial.read()==-1? "ERROR": Serial.readStringUntil('\n'); // Read incoming data
+        String receivedData = Serial.read()==-1? "ERROR": getData(); // Read incoming data
         Serial.print(receivedData); //log the received data
 
         // Check if the battery is low
