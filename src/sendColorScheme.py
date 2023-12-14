@@ -48,6 +48,7 @@ COLOR_SCHEME_MAP = {
     'ERROR': 999  # Default value for unmatched cases
 }
 
+
 # Function to send data to Arduino
 def send_to_arduino(ser, data):
     """Send data to Arduino via serial connection.
