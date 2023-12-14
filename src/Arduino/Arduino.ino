@@ -274,7 +274,7 @@ void setColorScheme(cases mode) {
 }
 cases getCase() {
     if (Serial.available() > 0) {
-        String receivedData = Serial.read()==-1?NULL: Serial.read(); // Read incoming data
+        String receivedData = Serial.read()==-1? "ERROR": Serial.readStringUntil('\n'); // Read incoming data
         Serial.print(receivedData); //log the received data
 
         // Check if the battery is low
