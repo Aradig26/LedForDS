@@ -5,8 +5,8 @@ from networktables import NetworkTables
 
 # Constants
 SERVER = 'roborio-467-frc.local'
-ARDUINO_PORT = 'COM5'
-BAUD_RATE = 115200
+ARDUINO_PORT = 'COM6'
+BAUD_RATE = 9600
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -17,7 +17,7 @@ try:
 except Exception as e:
     logging.error(f'Failed to initialize NetworkTables with server {SERVER}: {e}.')
 
-table = NetworkTables.getTable('Leds')
+table = NetworkTables.getTable('AdvantageKit/RealOutputs/Leds')
 
 
 # Function to send data to Arduino

@@ -5,7 +5,7 @@
 #endif
 
 int const NUM_PIXELS = 120; // Number of pixels in the NeoPixel strip
-int8_t const PIN = 13; // Pin for the NeoPixel strip
+int8_t const PIN = 11; // Pin for the NeoPixel strip
 Adafruit_NeoPixel strip;
 int ledIndexes[NUM_PIXELS]; // Array to store the indexes of the LEDs
 
@@ -63,7 +63,7 @@ void setColorScheme(cases mode);
 cases lastColorScheme;
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println("Start");
     for (int i = 0; i < NUM_PIXELS; i++) {
         ledIndexes[i] = i % 2 == 0 ? 1 : 0;
