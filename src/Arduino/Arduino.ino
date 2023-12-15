@@ -275,12 +275,10 @@ void setColorScheme(cases mode) {
 }
 
 cases getCase() {
-    if (Serial.available() > 0) {
-        int receivedInt = Serial.read(); // Read the incoming integer
+    if (Serial.available > 0) {
+        int receivedInt = Serial.parseInt(); // Read the incoming integer
         return static_cast<cases>(receivedInt);
-    }
-
-    return ERROR;
+        }
 }
 
 void loop() {
