@@ -60,7 +60,7 @@ def send_to_arduino(ser, data):
     data_int = COLOR_SCHEME_MAP.get(data, COLOR_SCHEME_MAP['ERROR'])  # Get the corresponding integer or use default
     logging.info(data_int)
     try:
-        ser.write(data_int)  # Send data to Arduino
+        ser.write([data_int])  # Send data to Arduino
         logging.info('Data sent to Arduino successfully.')
     except Exception as error:
         logging.error(f'Failed to send data to Arduino: {error}.')

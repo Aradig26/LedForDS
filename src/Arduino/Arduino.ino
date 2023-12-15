@@ -278,7 +278,7 @@ cases getCase() {
     if (Serial.available > 0) {
         int receivedInt = Serial.parseInt(); // Read the incoming integer
         return static_cast<cases>(receivedInt);
-        }
+    }
 }
 
 void loop() {
