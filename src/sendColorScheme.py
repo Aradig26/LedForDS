@@ -45,7 +45,7 @@ COLOR_SCHEME_MAP = {
     'BALANCE_VICTORY': 121,
     'AUTO_SCORE': 122,
     'IDLE': 123,
-    'ERROR': 999  # Default value for unmatched cases
+    'ERROR': 255  # Default value for unmatched cases
 }
 
 
@@ -58,6 +58,7 @@ def send_to_arduino(ser, data):
     data: The data to send.
     """
     data_int = COLOR_SCHEME_MAP.get(data, COLOR_SCHEME_MAP['ERROR'])  # Get the corresponding integer or use default
+    logging.info(data_int)
     try:
         ser.write(data_int)  # Send data to Arduino
         logging.info('Data sent to Arduino successfully.')
@@ -77,7 +78,7 @@ try:
             time.sleep(.25)  # Sleep for a bit to not thrash CPU
 
             # Read data from Arduino and log it
-            logging.info('Data received from Arduino: {}'.format(ser.read().decode('utf-8')))
+            logging.info('Data received from Arduino: {}'.format(ser.read()))
         except KeyboardInterrupt:
             ser.close()  # Close the serial connection on program termination
             logging.info('Serial connection to Arduino closed.')

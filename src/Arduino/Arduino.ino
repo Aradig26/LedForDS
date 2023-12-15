@@ -57,7 +57,7 @@ enum cases {
     BALANCE_VICTORY = 121,
     AUTO_SCORE = 122,
     IDLE = 123,
-    ERROR = 999
+    ERROR = 255
 };
 
 void setColorScheme(cases mode);
@@ -276,9 +276,7 @@ void setColorScheme(cases mode) {
 
 cases getCase() {
     if (Serial.available() > 0) {
-        int receivedInt = Serial.parseInt(); // Read the incoming integer
-        Serial.print(receivedInt); // Log the received data
-
+        int receivedInt = Serial.read(); // Read the incoming integer
         return static_cast<cases>(receivedInt);
     }
 
@@ -290,7 +288,8 @@ void loop() {
         // Clears leds if colorScheme changed
     if (colorScheme != lastColorScheme) {
       strip.clear();
-      lastColorScheme = colorScheme;
+      Serial.println(static_cast<int>(colorScheme)); // Log the colorScheme if it changed.
+      lastColorScheme = colorScheme; // Set the old colorScheme to the new one
     }
     setColorScheme(colorScheme); // Pass the LED state to the function
     strip.show(); // Update NeoPixel strip
