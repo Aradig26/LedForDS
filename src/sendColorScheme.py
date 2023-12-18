@@ -44,7 +44,7 @@ COLOR_SCHEME_MAP = {
     'SHELF': 120,
     'BALANCE_VICTORY': 121,
     'AUTO_SCORE': 122,
-    'IDLE': 123,
+    'DEFAULT': 123,
     'ERROR': 255  # Default value for unmatched cases
 }
 
