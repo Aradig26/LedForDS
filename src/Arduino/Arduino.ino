@@ -279,6 +279,7 @@ cases getCase() {
         int receivedInt = Serial.parseInt(); // Read the incoming integer
         return static_cast<cases>(receivedInt);
     }
+    return ERROR;
 }
 
 void loop() {
