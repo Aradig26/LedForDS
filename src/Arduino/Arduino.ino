@@ -275,9 +275,9 @@ void setColorScheme(cases mode) {
 }
 
 cases getCase() {
-    if (Serial.available > 0) {
+    if (Serial.available() > 0) {
         int receivedInt = Serial.parseInt(); // Read the incoming integer
-        return static_cast<cases>(receivedInt);
+        return receivedInt == 0 ? 255 : static_cast<cases>(receivedInt);
     }
     return ERROR;
 }
