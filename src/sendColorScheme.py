@@ -61,7 +61,6 @@ def send_to_arduino(ser, data):
     logging.info(data_int)
     try:
         ser.write([data_int])  # Send data to Arduino
-        logging.info('Data sent to Arduino successfully.')
     except Exception as error:
         logging.error(f'Failed to send data to Arduino: {error}.')
 

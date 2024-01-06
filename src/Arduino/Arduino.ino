@@ -5,7 +5,7 @@
 #endif
 
 int const NUM_PIXELS = 120; // Number of pixels in the NeoPixel strip
-int8_t const PIN = 11; // Pin for the NeoPixel strip
+int8_t const PIN = 13; // Pin for the NeoPixel strip
 Adafruit_NeoPixel strip;
 int ledIndexes[NUM_PIXELS]; // Array to store the indexes of the LEDs
 
@@ -34,28 +34,28 @@ const COLORS_467 BATTERY_LOW_COLOR = Orange;
 
 enum cases {
     WANT_CUBE = 100,
-    WANT_CONE = 101,
-    HOLD_CUBE = 102,
-    HOLD_CONE = 103,
-    INTAKE_CUBE = 104,
-    INTAKE_CONE = 105,
-    RELEASE_CUBE = 106,
-    RELEASE_CONE = 107,
-    BATTERY_LOW = 108,
-    ARM_UNCALIBRATED = 109,
-    CUBE_LOW = 110,
-    CUBE_MID = 111,
-    CUBE_HIGH = 112,
-    CONE_LOW = 113,
-    CONE_MID = 114,
-    CONE_HIGH = 115,
-    INTAKE_UNKNOWN = 116,
-    RELEASE_UNKNOWN = 117,
-    CALIBRATING = 118,
-    FLOOR = 119,
-    SHELF = 120,
-    BALANCE_VICTORY = 121,
-    AUTO_SCORE = 122,
+    WANT_CONE,
+    HOLD_CUBE,
+    HOLD_CONE,
+    INTAKE_CUBE,
+    INTAKE_CONE,
+    RELEASE_CUBE,
+    RELEASE_CONE,
+    BATTERY_LOW,
+    ARM_UNCALIBRATED,
+    CUBE_LOW,
+    CUBE_MID,
+    CUBE_HIGH,
+    CONE_LOW,
+    CONE_MID,
+    CONE_HIGH,
+    INTAKE_UNKNOWN,
+    RELEASE_UNKNOWN,
+    CALIBRATING,
+    FLOOR,
+    SHELF,
+    BALANCE_VICTORY,
+    AUTO_SCORE,
     IDLE = 123,
     ERROR = 255
 };
@@ -269,7 +269,7 @@ void setColorScheme(cases mode) {
             error();
             break;
         default:
-            rainbowLed();
+            error();
             break;
     }
 }
@@ -284,11 +284,11 @@ cases getCase() {
 
 void loop() {
     cases colorScheme = getCase();
-        // Clears leds if colorScheme changed
+    // Clears leds if colorScheme changed
     if (colorScheme != lastColorScheme) {
-      strip.clear();
-      Serial.println(static_cast<int>(colorScheme)); // Log the colorScheme if it changed.
-      lastColorScheme = colorScheme; // Set the old colorScheme to the new one
+        strip.clear();
+        Serial.println(static_cast<int>(colorScheme)); // Log the colorScheme if it changed.
+        lastColorScheme = colorScheme; // Set the old colorScheme to the new one
     }
     setColorScheme(colorScheme); // Pass the LED state to the function
     strip.show(); // Update NeoPixel strip
